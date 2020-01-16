@@ -5,3 +5,4 @@ add two lines!
 add two lines!
 test branch dev!
 test feature2 !
+test reflict!
