@@ -5,8 +5,4 @@ add new context to test !
 add two lines!
 add two lines!
 test branch dev!
-<<<<<<< HEAD
-test feature3 !
-=======
-test feature3 !
-feature1
+test conflict!
