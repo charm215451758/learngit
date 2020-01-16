@@ -6,3 +6,4 @@ add two lines!
 add two lines!
 test branch dev!
 test conflict!
+add merge test!
