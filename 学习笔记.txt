@@ -1,0 +1,130 @@
+git是一种分布式版本控制系统
+可以在每一台电脑中独立运行，同时为方便大家协作，有github和gitee这种共同平台给大家当作一个类似集中版本控制器的存在方便大家上传分支，但即使没有这样的远程库，git也能起到版本控制的作用。
+正式库和临时存储区，在正式区的操作必须要添加add或移除rm后再提交才能传入git库
+一个文件夹若需要作为git库，就必须先初始化git init
+建议用空文件夹作为初始库
+如果在正式库add至stage区后后悔了，就可以用git checout --撤销（参数忘记了）
+如果是已经提交（commit)后想返回之前的版本，就先查询历史版本git log
+可直接使用git set HEAD^返回上一版本，git set HEAD^^返回上上个版本，或通过git set HEAD*n返回上n-1个版本
+当然也可以返回到未来的版本，只要记得未来版本的编号，可以通过git log及git （忘记命令了）查看操作记录
+远程仓库：就是可以将本地库上传至github或gitee
+以github为例：
+首先需要先远程连接到github的某个库（一般是取同一个名字）
+git remote add origin http://地址，默认使用origin，是默认的库名，如果既要上传github又要上传gitee就取不同的名字
+比如git remote add gitee http://地址
+    git remote add github http:/地址
+新建后需要先初始化本地库至远程库
+git push -u origin
+如果需要从反操作，从远程库克隆库到本地，则使用git clone http://地址，网址有相关操作的说明
+分支管理
+     查看存储区状态git status
+     查看分支 git branch
+     切换并创建分支git checkout -b 分支名或git switch -c 分支名
+     切换分支git switch 分支名
+     那git branch 分支名是什么作用？忘记了！
+     切换了分支后，在分支上做添加提交的东西，返回Master主分支做合并操作
+     git merge 合并操作 如果是多个分支的做了修改，应该是要加分支名的，可做验证
+     有可能会自动执行合并(fast forward)
+     如果在分支做了修改提交，在master也做了同一个文件内容的修改提交，就有可能出现冲突conflict
+     这样时候如果要做git merge（合并）那就需要先解决冲突
+     查看git status和cat 文件名的就可以看到冲突在哪些地方，对冲突文件做修改后再提交就可以正常合并了
+     一般master和dve分支是需要上传远程库的，master作为版本更新使用，dev做为开发分支，可供多人在这个分支上再创建分支，以便将各自的开发修改合并到dev分支上。
+     要暂存手头上的进行中的分支可使用git stage 保存名称 暂时保存下来，处理完紧急的修改后，再通过git 名称恢复（命令不是很清晰，待更正）
+     git的命令可以使用全局变量做缩写，比如使用st表示status，用lg来查看分支时间线具体，这些自定义的全局变量也可以直接通过操作git config文件来写入删除。
+     -----------------------------------
+     如果是个人学习凭印象做的笔记，问题点大多是命令记忆不准确，需要更正
+     下面将根据廖雪峰大神的官方网站内容做学习笔记
+     -----------------------------------
+     1.1 安装git
+     	 linux系统上直接输入git 查看是否已安装git
+	 如果是Debian或Ubuntu，通过sudo apt-get install git 可完成git安装
+	 老的使用sudo apt-get install git-core
+	 其它版本可通过源码安装，至官网下载源码，依次输入./conig,make,sudo make install完成安装
+	 Max OS X系统
+	 方法一：安装homebrew，通过homwbrew安装Git
+	 方法二：从AppStore安装Xcode，运行Xcode选择菜单Xcode-》Preferences找到Download选择Command line Tolls点Install完成安装
+	 Windows系统
+	 官网或国内镜像下载安装程序，然后找到Git Bash就是命令行工具了。
+	 ---------》
+	 最后一步设置全局用户名：
+	 个人的用户可用个人用户名和邮箱
+	 公司的用户可用公司用户名和邮箱-这样方便区分是由哪个本地库做的变更
+	 这个用户名和邮箱并不是远程库(github or gitee)的用户名和密码，只是在本地库使用的，可以随便定义
+         命令：
+	 git config --global user.name “用户名”
+	 git config --global user.email "邮箱名“
+	 查看命令：git config user.name
+	           git config user.email
+          说明：global这个参数是对当前用户起作用的，如果不加，则只对当前仓库起作用
+	  配置文件存放在.git/config文件中  可通过cat .git/config查看,经过验证发现这个文件里不存在用户名和邮箱名的设置，有别名的设置。
+	  也可以直接通过修改该文件内容添加全局变量和删除变量
+          别名--懒人必备技巧
+	  实例：
+	  git config --global alias.st status
+	  git config --global alias.co checkout
+	  git config --global alias.ci commit
+	  git config --global alias.br branch
+	  也可以根据命令的实用效果来取别名
+	  比如命令git reset HEAD file 可以把暂存区的修改撤销掉（unstage)，重新返回工作区，那可以设置如下
+	  git config -- global alias.unstage 'reset HEAD'
+	  设置一个git last 用于显示最后一次提交信息
+	  git config -- global alias.last 'log -1'
+	  还可以设置很复杂的命令给别名
+	  git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+	  只要能想到的操作，都可以自定义别名，但别名是不是能重复的。
+	  可以通过编辑.git/config文件来操作
+      1.2 創建版本庫
+          版本庫：repostiory
+	  mkdir 庫名
+	  cd 庫名
+	  pwd
+	  確認版本庫所在路徑，這樣創建的版本庫就是空的，pwd命令用于顯示當前目錄
+	  為確保不出現莫名其妙的問題，建議使用純英文路徑，所有方便夾都使用英文
+	  跳到需要創建版本庫的當前目錄中，進行初始化作業
+	  git init
+	  git就會創建一個空的倉庫，可以通過ls -ah查看是否已創建.git目錄確認是否已創建成功
+	  不要使用公司的項目作為公開的git庫
+	  文本建議TXT格式的標準UTF-8編碼，以便跨平臺使用。
+	  window平臺可以使用notepad++設置編碼方式為UTF-8 with out BOM
+      1.3 添加文件
+          git add 文件名
+	  git commit -m "提交時附帶的信息"
+      2.1 版本回退
+          git log ##查看日誌
+	  git log --pretty=oneline ##單行顯示日誌
+          HEAD表示当前版本，上一个版本就是HEAD^,上上个版本就是HEAD^^,上100个版本就写成HEAD~100
+	  回退到上一个版本命令：
+	  git reset --hard HEAD^
+	  如果要回到未来的某个版本，就必须知道那个版本的commit id，commit类似于快照，每一次提交就是一个记录点。
+	  未来版本号可以通过git log 或git reflog来查询对应的commit id
+          区别：git log是查看提交的历史，当天没有关闭命令行都有效
+	        git reglog是用来查看命令历史，只要使用过的历史都能查看到
+      2.2 工作区和暂存区
+          Working Directory Stage Directory
+	  .git文件夹是一个版本库，在这个版本库中存了很多东西，其中最重要的就是stage(index)的暂存区，git会自动创建主分支Master
+	  git status可查看状态，如果暂存区是干净的，则表示工作区的文件没有变更，如果变更过，暂存区就会有内容，比如加了一个文件，但还没有提交时。
+          如果在添加一个文件后，没有提交前又做了其它更改，那就可能导致冲突conflict，这时可以通过对比找出冲突的地方，修改后再添加保存即可。
+	  git diff HEAD --文件名，可以查看当前版本与最后提交的版本之间的差异
+	  连续做过修改的文件，建议是将添加及提交连在一起使用，这样不容易导致冲突和差异。
+	  撤销
+	  git checkout --文件名  ##该命令可以将这个文件名在工作区的所有修改全部撤销，这个撤销有两种情况，一个是回到commit之前，一个是回到add之前，要看修改的时候是否提交。
+	  这个命令一定要加后面的--file参数，否则就会变成切换分支命令！要养成好的习惯就是，切换分支命令时使用switch，以免给自己造成困扰，撤销的时候一定要记得加文件名。
+	  如果修改已经添加到暂存区了，可以用git reset HEAD<file>将暂存区的修改撤销掉，重新回到工作区。
+	  git reset命令既可以回退版本，也可以撤销在暂存区的修改回到工作区。
+	  取消工作区的修改使用git checkout --filename
+	  养成习惯，在工作区做了修改，及时回顾确认后再使用add commit比较稳妥，在工作区要撤销修改，只需要git checkout--filename
+	  如果已经添加到暂存区了，使用git reset HEAD<filename>回到工作区，再将工作区的修改撤销。
+	  如果已经提交到版本库了，那就需要使用git reset HEAD^或commit id返回上一个或指定版本库了。
+          删除文件
+	  git rm filename.suffix
+	  如果添加到版本库后，做了删除操作，那就可以用git checkout-filename恢复误删除的文件，但没有添加至版本库的文件是不能恢复的！所以删除操作要比添加操作更加谨慎一点，删除之前最好先添加到版本库里，或先确认是否已经存在可恢复的版本了。
+	  远程仓库-github gitee
+          SSH加密管理
+	  创建ssh key
+	  ssh-keygen -t rsa -C "邮箱名“
+	  在.ssh目录里，有id_rsa和id_rsa.pub两人个文件，这就是SSH Key的秘钥对，id_rsa是私钥，不能泄露，id_rsa.pub是公钥，可以放心告诉别人。
+	  登陆github 在Account Setting->SSH Keys界面，将公钥内容。粘贴进去
+	  提醒：因为github是开放的，不要把敏感信息写入。
+
+
+
