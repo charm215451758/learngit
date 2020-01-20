@@ -125,6 +125,15 @@ git push -u origin
 	  在.ssh目录里，有id_rsa和id_rsa.pub两人个文件，这就是SSH Key的秘钥对，id_rsa是私钥，不能泄露，id_rsa.pub是公钥，可以放心告诉别人。
 	  登陆github 在Account Setting->SSH Keys界面，将公钥内容。粘贴进去
 	  提醒：因为github是开放的，不要把敏感信息写入。
-
-
-
+          添加远程仓库：
+	  先在github中创建一个新的仓库,然后根据提示把本地的git仓库推送到远程仓库上
+	  git remote add origin 远程仓库地址
+	  这条命令中的origin是默认的远程库叫法，如果需要同时同步一个本地库至github及gitee（码云）,可以自定义这个远程库的名称，以便指定推送至不同的远程库中。
+	  第一次推送时，需要加一个-u的参数
+	  git push -u origin master
+	  -u参数可以把master分支分部内容推送至远程库，并与远程的master分支关联起来，第二次推送的时候就不必加这个参数了，可以简写如下
+	  git push origin master
+	  如果不是推送主分支，则修改master为对应分支名，如果远程库是自定名也需要做相应的修改
+	  从远程库克隆至本地库
+	  git clone 远程库地址
+	  要使用SSH命令的格式做推送就必须先做好公钥和私钥，以便能够使用SSH通信。
