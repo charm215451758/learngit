@@ -139,7 +139,7 @@ git push -u origin
 	  要使用SSH命令的格式做推送就必须先做好公钥和私钥，以便能够使用SSH通信。
      2.3  管理修改，撤销修改，删除文件
           所谓修改是包括増加，变更文件内容，新増文件，删除文件等
-	  多次修改，在最后一次都需要添加文件（add/Delete）删除文件操作后再提交一次git commit这样才能保证所有的修改都是能提交
+	  多次修改，在最后一次都需要添加文件（add/rm）删除文件操作后再提交一次git commit这样才能保证所有的修改都是能提交
 	  如果两次修改是对同一个文件做的，那可以通过命令查看工作区与版本库里最后版本同一个文件的区别
           git diff filename：比较工作区和暂存区	  
 	  git diff HEAD -- filename:比较工作区和版本库的最新版本 
@@ -167,4 +167,41 @@ git push -u origin
           未来版本号可以通过git log 或git reflog来查询对应的commit id
           区别：git log是查看提交的历史，当天没有关闭命令行都有效
                 git reglog是用来查看命令历史，只要使用过的历史都能查看到
-	
+	  删除文件使用git rm filename 如果误删除了文件可以使用git checkout -- filename 从版本库中还原被误删除的文件，只有同步到版本库的文件可以使用这个方法还原。
+       3.1 添加到远程仓库
+           远程仓库现在有两个常用的github&gitee，如果需要建立自己的git远程仓库，则需要找一台自己的服务器建立自己的远程仓库
+	   实例中以github为例  注册github的帐号后，Create a new reop
+	   命令：git remote add origin git@github.com:用户名/项目名.git
+	   使用如上命令在本地关联远程库，按照这个命令关联的时候，远程库名就叫这个默认的origin，如果有多个远程库的时候，就可以自定义这个远程库名
+	   关联后第一次将本地库所有内容推送到远程库上命令如下：
+	   git push -u origin master
+	   实际上就是把当前的主分支推送上去，因为远程库是空的，所以带上-u参数，这样不仅能推送master分支，也能将本地master分支与远程的master分支关联起来，以后推送时就不必带这个-u参数了
+	   git push origin master
+	   备注：远程库的地址如果不是使用ssh的方式，也可以使用url形式的地址
+           比如：git remote add origin  https://github.com/charm215451758/learngit.git
+       3.2 从远程库克隆
+           要将一个远程库克隆到本地，使用如下命令
+	   git clone git@github.com:用户名/库名.git
+	   同样可以使用https协议的url克隆，不过使用ssh协议是原生的，速度最快，建议能使用ssh时就使用ssh协议。
+       4.1 创建与合并分支
+           HEAD指针指向分支branch,比如主分支master，分支指向time point ，这样串起来的就是一个时间线，如果在某个时间点出现了一个新的分支branch，HEAD就会指向新的分支，这时候做的修改，只是在分支上进行的，并不会影响主分支 master。
+	   如果要合并分支，就将master指向当前分支的提交，并将HEAD指针返回到master上，这时候两个分支就是一样的内容了，即使这时候将新建的分支删除，也不会影响master里已经合并的内容。
+	   实例：
+	   1.创建分支dev，然后切换到分支dev上,命令有两条，推荐使用switch
+	   git checout -b dev
+	   git switch -c dev--推荐
+	   -b参数表示创建并切换，相当于以后两条命令
+	   git branch dev
+	   git checkout dev
+	   查看分支信息
+	   git branch
+	   星号标记会指明当前所在分支是哪一个
+	   切换分支命令：有两条，推荐使用switch
+	   git checkout master 
+	   git switch master --推荐
+	   合并命令
+	   git merge 分支名
+	   如果显示fast-forward则表示是快速合并
+	   删除分支命令
+	   git branch -d 分支名
+
