@@ -253,3 +253,16 @@ git push -u origin
 	   如果git pull 提示no tracking information,则说明本地分支与远程分支的链接关系没有创建，用命令git branch -- set-upstream-to <branch-name> origin/<branch-name>
            从远程pull之后，要与本地合并在一起解决冲突再提交之前，如果想让提交的Log美观一点不出现分叉，可以使用git rebase来将本地变更的历史整成一条直线，之后再远程推送出去，就会显得很美观了，但缺点就是看不到本地变更的历史了，这种操作在确认了不需要追溯本地提交历史的情况下，可以让本地和远程的提交日志变得美观和直接易懂。
 	   因为如果不使用rebase就需要三方对比，因为远程库上有一个提交是比你早的，但你获取的是远程库之前的内容，因此先梳理一下当前远程库（包括别人提交）的内容与自己的冲突，解决冲突后再提交会显得思路更清楚。
+	4.5 标签管理
+	    命令git tag <tagname>用于新建一个标签，默认为HEAD，也可以指定一个commitid
+	    命令git tag -a <tagname> -m "说明文字" 可以指定标签信息
+	    命令git tag 可以查看所有标签
+	    命令git tag <tagname>可以查看到说明文字
+	    命令git tag -d <tagname>可以删除标签
+	    因为创建的标签只存储在本地，不会自动推送到远程，所以，打错的标签本地安全删除
+	    如果要推送某个标签至远程库，使用命令git push origin <tagname>
+	    如果要推送所有的标签至远程库，可使用命令git push origin -- tags
+	    如果标签已经推送到远程库了，要删除的话，就要先删除本地标签，再删除远程库
+	    git tag -d <tagname>
+	    git push origin :refs/tags/<tagname>
+
