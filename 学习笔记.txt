@@ -247,7 +247,7 @@ git push -u origin
 	   git remote -v
 	   通常多人协作的工作模式是这样的：
 	   1.试图用git push origin <branch-name>推送自己的修改；
-	   2.如果推送失败，则你的本地更新，需要先用git pull 试图合并
+	   2.如果推送失败，则你的本地更新，需要先用git pull 试图合并 可以通过git remote  -v查看当前本地库关联了哪个远程库
 	   3.如果合并有冲突，则解决冲突，并在本地提交
 	   4.没有冲突或解决掉冲突后，再用git push origin <branch-name>推送就能成功
 	   如果git pull 提示no tracking information,则说明本地分支与远程分支的链接关系没有创建，用命令git branch -- set-upstream-to <branch-name> origin/<branch-name>
